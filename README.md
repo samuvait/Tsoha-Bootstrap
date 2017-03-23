@@ -2,7 +2,10 @@
 
 Yleisiä linkkejä:
 
-* [Linkki sovellukseeni](https://samuvait.users.cs.helsinki.fi/tsohasov)
+* [Linkki sovellukseeni etusivulle](https://samuvait.users.cs.helsinki.fi/tsohasov)
+* [Kirjautuminen](https://samuvait.users.cs.helsinki.fi/tsohasov/login)
+* [Askareen katselu](https://samuvait.users.cs.helsinki.fi/tsohasov/tasklist/1)
+* [Askareen muokkaus](https://samuvait.users.cs.helsinki.fi/tsohasov/tasklist/2)
 * [Linkki dokumentaatiooni](https://github.com/samuvait/Tsoha-Bootstrap/blob/master/doc/dokumentaatio.pdf)
 
 ## Työn aihe
