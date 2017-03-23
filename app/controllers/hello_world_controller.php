@@ -13,4 +13,20 @@
         View::make('helloworld.html');
 //      echo 'Hello World!';
     }
+    
+    public static function task_list(){
+        View::make('suunnitelmat/list.html');
+    }
+    
+    public static function login(){
+        View::make('suunnitelmat/login.html');
+    }
+    
+    public static function task_page(){
+        View::make('suunnitelmat/taskpage.html');
+    }
+    
+    public static function task_modify(){
+        View::make('suunnitelmat/modify.html');
+    }
   }
