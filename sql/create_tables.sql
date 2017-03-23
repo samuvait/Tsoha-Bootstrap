@@ -1,16 +1,16 @@
-CREATE TABLE Player(
-  id SERIAL PRIMARY KEY,
-  name varchar(50) NOT NULL,
-  password varchar(50) NOT NULL
+CREATE TABLE Kayttaja(
+id SERIAL PRIMARY KEY,
+name varchar(50) NOT NULL,
+password varchar(50) NOT NULL
 );
 
-CREATE TABLE Game(
-  id SERIAL PRIMARY KEY,
-  player_id INTEGER REFERENCES Player(id), -- Viiteavain Player-tauluun
-  name varchar(50) NOT NULL,
-  played boolean DEFAULT FALSE,
-  description varchar(400),
-  published DATE,
-  publisher varchar(50),
-  added DATE
+CREATE TABLE Askare(
+id SERIAL PRIMARY KEY,
+-- kayttaja_id INTEGER REFERENCES Kayttaja(id),
+name varchar(50) NOT NULL,
+suoritettu boolean DEFAULT FALSE,
+description varchar(400),
+lisatty DATE,
+deadline DATE,
+tarkeysaste INTEGER
 );
