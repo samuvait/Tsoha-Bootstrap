@@ -7,7 +7,7 @@ CREATE TABLE Kayttaja(
 
 CREATE TABLE Askare(
     id SERIAL PRIMARY KEY,
-    kayttaja_id INTEGER REFERENCES Kayttaja(id),
+--     kayttaja_id INTEGER REFERENCES Kayttaja(id),
     name varchar(50) NOT NULL,
     suoritettu boolean DEFAULT FALSE,
     description varchar(400),
