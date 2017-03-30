@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
   <h1>Käyttäjän Pekka muistilista</h1>
-
+  <div class ="col-md-4">
   <p>
-    <a href="#" class="btn btn-success">Lisää peli</a>
+    <a href="#" class="btn btn-success">Lisää askare</a>
   </p>
-
+  </div>
+  
+  <div class ="col-md-8">
   <table class="table table-striped table-bordered">
     <thead>
       <tr>
@@ -20,7 +22,7 @@
     </thead>
 
     <tbody>
-      <!-- Listataan pelit tähän -->
+      <!-- Listataan askareet tähän -->
       <tr>
         <td>Tee tiskit</td>
         <td>Kotityö</td>
@@ -32,4 +34,5 @@
       </tr>
     </tbody>
   </table>
+  </div>
 {% endblock %}
