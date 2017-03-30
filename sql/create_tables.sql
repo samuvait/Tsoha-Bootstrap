@@ -8,9 +8,10 @@ CREATE TABLE Askare(
 id SERIAL PRIMARY KEY,
 -- kayttaja_id INTEGER REFERENCES Kayttaja(id),
 name varchar(50) NOT NULL,
-suoritettu boolean DEFAULT FALSE,
+luokka varchar(40),
+done varchar(20),
 description varchar(400),
-lisatty DATE,
+added DATE,
 deadline DATE,
-tarkeysaste INTEGER
+importance INTEGER
 );

@@ -10,7 +10,10 @@
 
     public static function sandbox(){
       // Testaa koodiasi täällä
-        View::make('helloworld.html');
+        $tiskit = Askare::find(1);
+        $askareet = Askare::all();
+        Kint::dump($askareet);
+        Kint::dump($tiskit);
 //      echo 'Hello World!';
     }
     
