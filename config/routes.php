@@ -1,16 +1,8 @@
 <?php
 
-//  $routes->get('/', function() {
-//    HelloWorldController::task_list();
-//  });
-
   $routes->get('/hiekkalaatikko', function() {
     HelloWorldController::sandbox();
   });
-  
-//  $routes->get('/tasklist', function() {
-//    HelloWorldController::task_list();
-//  });
   
   $routes->get('/login', function() {
     UserController::login();
@@ -18,10 +10,6 @@
   
   $routes->post('/login', function() {
     UserController::handle_login();
-  });
-  
-  $routes->get('/tasklist/2', function() {
-    HelloWorldController::task_modify();
   });
   
   $routes->get('/', function(){
