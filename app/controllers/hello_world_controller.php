@@ -10,10 +10,20 @@
 
     public static function sandbox(){
       // Testaa koodiasi täällä
-        $tiskit = Askare::find(1);
-        $askareet = Askare::all();
-        Kint::dump($askareet);
-        Kint::dump($tiskit);
+        $tiskit = new Askare(array(
+            'name' => 't',
+            'luokka' => 'ab',
+            'deadline' => '2017-2-27',
+            'importance' => '2',
+            'description' => 'Ryttyiset kadet'
+        ));
+        $errors = $tiskit->errors();
+
+        Kint::dump($errors);
+//        $tiskit = Askare::find(1);
+//        $askareet = Askare::all();
+//        Kint::dump($askareet);
+//        Kint::dump($tiskit);
 //      echo 'Hello World!';
     }
     

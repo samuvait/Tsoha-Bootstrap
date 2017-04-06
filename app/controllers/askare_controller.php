@@ -16,20 +16,26 @@ class AskareController extends BaseController{
         
         $today = date('Y-m-d');
         
-        $task = new Askare(array(
+        $attributes = array(
             'name' => $params['name'],
             'luokka' => $params['luokka'],
             'description' => $params['description'],
             'deadline' => $params['deadline'],
             'importance' => $params['importance'],
             'added' => $today
-        ));
+        );
         
+        $task = new Askare($attributes);
+        $errors = $task->errors();
 //        Kint::dump($params);
+        if (count($errors) == 0) {
+            $task->save();
+            Redirect::to('/askare/' . $task->id, array('message' => 'Askare on lisätty muistilistaasi!'));
+        } else {
+            View::make('askare/new.html', array('errors' => $errors, 'attributes' => $attributes));
+        }
         
-        $task->save();
         
-        Redirect::to('/askare/' . $task->id, array('message' => 'Askare on lisätty muistilistaasi!'));
     }
     
     public static function create(){
