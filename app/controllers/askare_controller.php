@@ -2,13 +2,52 @@
 
 class AskareController extends BaseController{
     public static function index(){
-        $askareet = Askare::all();
+        $user = self::get_user_logged_in();
+        if (is_null($user)) {
+            $user_id = 3;
+        } else {
+            $user_id = $user->id;
+        }
+        $askareet = Askare::all($user_id);
         View::make('askare/index.html', array('askareet' => $askareet));
     }
     
     public static function show($id){
         $askare = Askare::find($id);
-        View::make('askare/taskpage.html', array('askare' =>$askare));
+        View::make('askare/taskpage.html', array('askare' => $askare));
+    }
+    
+    public static function edit($id) {
+        $task = Askare::find($id);
+        View::make('askare/edit.html', array('attributes' => $task));
+    }
+    
+    public static function update($id) {
+        $params = $_POST;
+        $attributes = array(
+            'id' => $id,
+            'name' => $params['name'],
+            'luokka' => $params['luokka'],
+            'description' => $params['description'],
+            'deadline' => $params['deadline'],
+            'importance' => $params['importance']
+        );
+        
+        $task = new Askare($attributes);
+        $errors = $task->errors();
+        
+        if(count($errors) > 0) {
+            View::make('askare/edit.html', array('errors' => $errors, 'attributes' => $attributes));
+        } else {
+            $task->update();
+            Redirect::to('/askare/' . $task->id, array('message' => 'Askaretta on muokattu onnistuneesti!'));
+        }
+    }
+    
+    public static function remove($id) {
+        $task = new Askare(array('id' => $id));
+        $task->destroy();
+        Redirect::to('/', array('message' => 'Askare on poistettu onnistuneesti!'));
     }
     
     public static function store(){
@@ -22,6 +61,7 @@ class AskareController extends BaseController{
             'description' => $params['description'],
             'deadline' => $params['deadline'],
             'importance' => $params['importance'],
+            'kayttaja_id' => self::get_user_logged_in()->id,
             'added' => $today
         );
         

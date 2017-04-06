@@ -13,11 +13,11 @@
 //  });
   
   $routes->get('/login', function() {
-    HelloWorldController::login();
+    UserController::login();
   });
   
-  $routes->get('/tasklist/1', function() {
-    HelloWorldController::task_page();
+  $routes->post('/login', function() {
+    UserController::handle_login();
   });
   
   $routes->get('/tasklist/2', function() {
@@ -25,17 +25,29 @@
   });
   
   $routes->get('/', function(){
-      AskareController::index(); 
+    AskareController::index(); 
   });
   
   $routes->post('/askare', function(){
-  AskareController::store();
+    AskareController::store();
   });
   
   $routes->get('/askare/new', function(){
-      AskareController::create();
+    AskareController::create();
   });
 
   $routes->get('/askare/:id', function($id){
-      AskareController::show($id);
+    AskareController::show($id);
+  });
+  
+  $routes->get('/askare/:id/edit', function($id) {
+    AskareController::edit($id);
+  });
+  
+  $routes->post('/askare/:id/edit', function($id) {
+    AskareController::update($id);
+  });
+  
+  $routes->post('/askare/:id/remove', function($id) {
+    AskareController::remove($id);
   });

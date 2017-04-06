@@ -2,16 +2,16 @@
 
 class Askare extends BaseModel {
     
-    public $id, $name, $luokka, $done, $description, $added, $deadline, $importance, $validators;
+    public $id, $name, $luokka, $done, $description, $added, $deadline, $importance, $kayttaja_id, $validators;
     
     public function __construct($attributes) {
         parent::__construct($attributes);
-        $this->validators = array('validate_name', 'validate_luokka', 'validate_deadline', 'validate_description', 'validate_importance');
+        $this->validators = array('validate_name', 'validate_luokka', 'validate_deadline', 'validate_description', 'validate_importance', 'validate_kayttaja_id');
     }
     
-    public static function all(){
-        $query = DB::connection()->prepare('SELECT * FROM Askare');
-        $query->execute();
+    public static function all($user_id){
+        $query = DB::connection()->prepare('SELECT * FROM Askare WHERE kayttaja_id = :user_id');
+        $query->execute(array('user_id' => $user_id));
         $rows = $query->fetchAll();
         $tasks = array();
         
@@ -53,12 +53,23 @@ class Askare extends BaseModel {
     }
     
     public function save(){
-        $query = DB::connection()->prepare('INSERT INTO Askare (name, luokka, description, deadline, importance, added) VALUES (:name, :luokka, :description, :deadline, :importance, :added) RETURNING id');
-        $query->execute(array('name' => $this->name, 'description' => $this->description, 'luokka' => $this->luokka, 'deadline' => $this->deadline, 'importance' => $this->importance, 'added' => $this->added));
+        $query = DB::connection()->prepare('INSERT INTO Askare (name, luokka, description, deadline, importance, added, kayttaja_id) VALUES (:name, :luokka, :description, :deadline, :importance, :added, :user_id) RETURNING id');
+        $query->execute(array('name' => $this->name, 'description' => $this->description, 'luokka' => $this->luokka, 'deadline' => $this->deadline, 'importance' => $this->importance, 'added' => $this->added, 'user_id' => $this->kayttaja_id));
         $row = $query->fetch();
 //        Kint::trace();
 //        Kint::dump($row);
         $this->id = $row['id'];
+    }
+    
+    public function update() {
+        $query = DB::connection()->prepare('UPDATE Askare SET name = :name, luokka = :luokka, description = :description, deadline = :deadline, importance = :importance WHERE id = :id');
+        $query->execute(array('id' => $this->id, 'name' => $this->name, 'description' => $this->description, 'luokka' => $this->luokka, 'deadline' => $this->deadline, 'importance' => $this->importance));
+        
+    }
+    
+    public function destroy() {
+        $query = DB::connection()->prepare('DELETE FROM Askare WHERE id = :id');
+        $query->execute(array('id' => $this->id));
     }
     
     public function validate_string_length($string, $length){
@@ -135,6 +146,11 @@ class Askare extends BaseModel {
         if(!is_numeric($this->importance)){
             $errors[] = 'Tärkeysasteen täytyy olla luku!';
         }
+        return $errors;
+    }
+    
+    public function validate_kayttaja_id() {
+        $errors = array();
         return $errors;
     }
 }

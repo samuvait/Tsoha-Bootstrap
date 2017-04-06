@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 
+{% import "macros/forms.html" as forms %}
+
 {% if message is not null %}
 <div class="alert alert-success">
     {{message}}
@@ -11,7 +13,9 @@
   <h1>{{askare.luokka}}</h1>
   <!-- Painikkeet tähän -->
   <p>
-    <button class="btn btn-danger">Poista</button> <a href="#" class="btn btn-default">Muokkaa</a>
+<!--    <button class="btn btn-danger">Poista</button>-->
+    {{forms.remove_button("#{base_path}/askare/#{askare.id}/remove")}}
+    <a href="{{base_path}}/askare/{{askare.id}}/edit" class="btn btn-default">Muokkaa</a>
   </p>
   <!-- Tiedot tulee listana tähän -->
   <ul style="font-size: 20px">
