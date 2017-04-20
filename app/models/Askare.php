@@ -6,7 +6,7 @@ class Askare extends BaseModel {
     
     public function __construct($attributes) {
         parent::__construct($attributes);
-        $this->validators = array('validate_name', 'validate_luokka', 'validate_deadline', 'validate_description', 'validate_importance', 'validate_kayttaja_id');
+        $this->validators = array('validate_name', 'validate_deadline', 'validate_description', 'validate_importance', 'validate_kayttaja_id');
     }
     
     public static function all($user_id){

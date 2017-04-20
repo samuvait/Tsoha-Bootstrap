@@ -12,6 +12,10 @@
     UserController::handle_login();
   });
   
+  $routes->post('/logout', function() {
+    UserController::logout();
+  });
+  
   $routes->get('/', function(){
     AskareController::index(); 
   });
@@ -38,4 +42,31 @@
   
   $routes->post('/askare/:id/remove', function($id) {
     AskareController::remove($id);
+  });
+  
+  $routes->get('/luokka', function(){
+    LuokkaController::luokat(); 
+  });
+  $routes->post('/luokkastore', function(){
+    LuokkaController::store(); 
+  });
+  
+    $routes->get('/luokka/new', function(){
+    LuokkaController::create();
+  });
+
+  $routes->get('/luokka/:id', function($id){
+    LuokkaController::show($id);
+  });
+  
+  $routes->get('/luokka/:id/edit', function($id) {
+    LuokkaController::edit($id);
+  });
+  
+  $routes->post('/luokka/:id/edit', function($id) {
+    LuokkaController::update($id);
+  });
+  
+  $routes->post('/luokka/:id/remove', function($id) {
+    LuokkaController::remove($id);
   });

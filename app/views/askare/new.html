@@ -21,7 +21,12 @@
       
     <div class="form-group">
       <label>Luokka</label>
-      <input name="luokka" class="form-control" value="{{attributes.luokka}}" type="text">
+      <select class="form-control" name="luokka[]" multiple="">
+        {% for luokka in luokat %}
+          <option value="{{luokka.luokka_id}}">{{luokka.luokka_name}}</option><!--Luokan id täytyy muuttaa nimeksi indexissa-->
+        {% endfor %}
+      </select>
+<!--      <input name="luokka" class="form-control" value="{{attributes.luokka}}" type="text">-->
     </div>
       
     <div class="form-group">

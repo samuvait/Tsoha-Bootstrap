@@ -6,6 +6,7 @@ password varchar(50) NOT NULL
 
 CREATE TABLE Luokka(
 luokka_id SERIAL PRIMARY KEY,
+kayttaja_id INTEGER REFERENCES Kayttaja (id),
 luokka_name varchar(50) NOT NULL,
 description varchar(400)
 );

@@ -1,7 +1,9 @@
 INSERT INTO Kayttaja (name, password) VALUES ('Pekka', 'Pekka123');
 INSERT INTO Kayttaja (name, password) VALUES ('Maija', 'Maija123');
 
-INSERT INTO Luokka (luokka_name, description) VALUES ('Kotityöt', 'Asunnosta huolehtimiseen tarvittavat askareet, joista kaikki ovat yhteisesti vastuussa.');
+INSERT INTO Luokka (luokka_name, description, kayttaja_id) VALUES ('Kotityöt', 'Asunnosta huolehtimiseen tarvittavat askareet, joista kaikki ovat yhteisesti vastuussa.', '1');
+INSERT INTO Luokka (luokka_name, description, kayttaja_id) VALUES ('Kotitehtävät', 'Kurssien tehtävät, jotka täytyy tehdä, jotta menestyy kurssilla.', '1');
+INSERT INTO Luokka (luokka_name, description, kayttaja_id) VALUES ('Lemmikkieläimet', 'Lemmikkieläinten huolehtimisen askareet.', '2');
 
 INSERT INTO Askare (name, luokka, description, deadline, importance, added, kayttaja_id) VALUES ('Tee tiskit', 'Kotityöt','Yhdessä aiheutettujen tiskien tiskaaminen käsin. Luo harmoniaa.', '2017-04-14', '10', NOW(), '1');
 INSERT INTO Askare (name, luokka, description, deadline, importance, added, kayttaja_id) VALUES ('Imurointi', 'Kotityöt','Talouden imurointi läpikotaisin', '2017-04-10', '8', NOW(), '1');

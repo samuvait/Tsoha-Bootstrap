@@ -2,9 +2,10 @@
 
 class AskareController extends BaseController{
     public static function index(){
+        self::check_logged_in();
         $user = self::get_user_logged_in();
         if (is_null($user)) {
-            $user_id = 3;
+            $user_id = null;
         } else {
             $user_id = $user->id;
         }
@@ -12,12 +13,26 @@ class AskareController extends BaseController{
         View::make('askare/index.html', array('askareet' => $askareet));
     }
     
+    public static function luokat(){
+        self::check_logged_in();
+        $user = self::get_user_logged_in();
+        if (is_null($user)) {
+            $user_id = 3;
+        } else {
+            $user_id = $user->id;
+        }
+        $luokat = Luokka::all($user_id);
+        View::make('luokka/luokat.html', array('luokat' => $luokat));
+    }
+    
     public static function show($id){
+        self::check_logged_in();
         $askare = Askare::find($id);
         View::make('askare/taskpage.html', array('askare' => $askare));
     }
     
     public static function edit($id) {
+        self::check_logged_in();
         $task = Askare::find($id);
         View::make('askare/edit.html', array('attributes' => $task));
     }
@@ -54,17 +69,21 @@ class AskareController extends BaseController{
         $params = $_POST;
         
         $today = date('Y-m-d');
+        $luokat = $params['luokka'];
         
         $attributes = array(
             'name' => $params['name'],
-            'luokka' => $params['luokka'],
+            'luokka' => array(),
             'description' => $params['description'],
             'deadline' => $params['deadline'],
             'importance' => $params['importance'],
             'kayttaja_id' => self::get_user_logged_in()->id,
             'added' => $today
         );
-        
+        foreach($luokat as $luokka){
+            // Lisätään kaikkien luokkien id:t taulukkoon
+            $attributes['luokka'][] = $luokka;
+        }
         $task = new Askare($attributes);
         $errors = $task->errors();
 //        Kint::dump($params);
@@ -79,7 +98,14 @@ class AskareController extends BaseController{
     }
     
     public static function create(){
-        View::make('askare/new.html');
+        $user = self::get_user_logged_in();
+        if (is_null($user)) {
+            $user_id = null;
+        } else {
+            $user_id = $user->id;
+        }
+        $luokat = Luokka::all($user_id);
+        View::make('askare/new.html', array('luokat' => $luokat));
     }
 }
 
