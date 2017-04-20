@@ -83,6 +83,7 @@ class AskareController extends BaseController{
     }
     
     public static function create(){
+        self::check_logged_in();
         $user = self::get_user_logged_in();
         if (is_null($user)) {
             $user_id = null;
