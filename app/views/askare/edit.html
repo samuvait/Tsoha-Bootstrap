@@ -11,6 +11,12 @@
           </ul>
         </div>
     {% endif %}
+    
+    <div by class="form-group" align="right">
+      <form method="post" action="{{base_path}}/askare/{{attributes.id}}/remove" style="display: inline-block;">
+        <button type="submit" class="btn btn-danger">Poista</button>
+      </form>
+    </div>
   
   <form method="post" action="{{base_path}}/askare/{{attributes.id}}/edit">
       

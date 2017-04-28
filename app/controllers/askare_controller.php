@@ -15,16 +15,26 @@ class AskareController extends BaseController{
 
     public static function show($id){
         self::check_logged_in();
-        $askare = Askare::find($id);
-        View::make('askare/taskpage.html', array('askare' => $askare));
+        $curid = self::get_user_logged_in()->id;
+        $askare = Askare::find($id, $curid);
+        if (is_null($askare)) {
+            Redirect::to('/', array('message' => 'Luokan sivua ei ole olemassa!'));
+        } else {
+            View::make('askare/taskpage.html', array('askare' => $askare));
+        }
     }
     
     public static function edit($id) {
         self::check_logged_in();
-
-        $task = Askare::find($id);
+        
+        $curid = self::get_user_logged_in()->id;
+        $task = Askare::find($id, $curid);
         $luokat = Luokka::all(self::get_user_logged_in()->id);
-        View::make('askare/edit.html', array('attributes' => $task, 'luokat' => $luokat));
+        if (is_null($task)) {
+            Redirect::to('/', array('message' => 'Luokan sivua ei ole olemassa!'));
+        } else {
+            View::make('askare/edit.html', array('attributes' => $task, 'luokat' => $luokat));
+        }
     }
     
     public static function update($id) {
@@ -40,9 +50,10 @@ class AskareController extends BaseController{
         
         $task = new Askare($attributes);
         $errors = $task->errors();
+        $luokat = Luokka::all(self::get_user_logged_in()->id);
         
         if(count($errors) > 0) {
-            View::make('askare/edit.html', array('errors' => $errors, 'attributes' => $attributes));
+            View::make('askare/edit.html', array('errors' => $errors, 'attributes' => $attributes, 'luokat' => $luokat));
         } else {
             $task->update();
             Redirect::to('/askare/' . $task->id, array('message' => 'Askaretta on muokattu onnistuneesti!'));
@@ -60,6 +71,10 @@ class AskareController extends BaseController{
         
         $today = date('Y-m-d');
         
+        if (!array_key_exists('luokka', $params)) {
+            $params['luokka'] = "";
+        }
+        
         $attributes = array(
             'name' => $params['name'],
             'luokka' => $params['luokka'],
@@ -76,7 +91,8 @@ class AskareController extends BaseController{
             $task->save();
             Redirect::to('/askare/' . $task->id, array('message' => 'Askare on lisätty muistilistaasi!'));
         } else {
-            View::make('askare/new.html', array('errors' => $errors, 'attributes' => $attributes));
+            $luokat = Luokka::all(self::get_user_logged_in()->id);
+            View::make('askare/new.html', array('errors' => $errors, 'attributes' => $attributes, 'luokat' => $luokat));
         }
         
         

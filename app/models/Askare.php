@@ -6,7 +6,7 @@ class Askare extends BaseModel {
     
     public function __construct($attributes) {
         parent::__construct($attributes);
-        $this->validators = array('validate_name', 'validate_deadline', 'validate_description', 'validate_importance', 'validate_kayttaja_id');
+        $this->validators = array('validate_name', 'validate_luokka', 'validate_deadline', 'validate_description', 'validate_importance', 'validate_kayttaja_id');
     }
     
     public static function all($user_id){
@@ -30,9 +30,9 @@ class Askare extends BaseModel {
         return $tasks;
     }
     
-    public static function find($id) {
-        $query = DB::connection()->prepare('SELECT * FROM Askare WHERE id = :id LIMIT 1');
-        $query->execute(array('id' => $id));
+    public static function find($id, $user_id) {
+        $query = DB::connection()->prepare('SELECT * FROM Askare WHERE id = :id AND kayttaja_id = :user_id LIMIT 1');
+        $query->execute(array('id' => $id, 'user_id' => $user_id));
         $row = $query->fetch();
         
         if($row){
@@ -108,11 +108,11 @@ class Askare extends BaseModel {
     public function validate_luokka(){
         $errors = array();
         if($this->luokka == '' || $this->luokka == null){
-            $errors[] = 'Luokan nimi ei saa olla tyhjä!';
+            $errors[] = 'Luokka ei voi olla tyhjä!';
         }
-        if($this->validate_string_length($this->luokka, 3)){
-            $errors[] = 'Luokan pituuden täytyy olla vähintään kolme merkkiä';
-        }
+//        if($this->validate_string_length($this->luokka, 3)){
+//            $errors[] = 'Luokan pituuden täytyy olla vähintään kolme merkkiä';
+//        }
         return $errors;
     }
     
