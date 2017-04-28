@@ -4,25 +4,31 @@ class LuokkaController extends BaseController{
     public static function luokat(){
         self::check_logged_in();
         $user = self::get_user_logged_in();
-        if (is_null($user)) {
-            $user_id = 3;
-        } else {
-            $user_id = $user->id;
-        }
+        $user_id = $user->id;
         $luokat = Luokka::all($user_id);
         View::make('luokka/luokat.html', array('luokat' => $luokat));
     }
     
     public static function show($luokka_id){
         self::check_logged_in();
-        $luokka = Luokka::find($luokka_id);
-        View::make('luokka/luokkapage.html', array('luokka' => $luokka));
+        $curid = self::get_user_logged_in()->id;
+        $luokka = Luokka::find($luokka_id, $curid);
+        if (is_null($luokka)) {
+            Redirect::to('/luokka', array('message' => 'Luokan sivua ei ole olemassa!'));
+        } else {
+            View::make('luokka/luokkapage.html', array('luokka' => $luokka));
+        }
     }
     
     public static function edit($luokka_id) {
         self::check_logged_in();
-        $luokka = Luokka::find($luokka_id);
-        View::make('luokka/edit.html', array('attributes' => $luokka));
+        $curid = self::get_user_logged_in()->id;
+        $luokka = Luokka::find($luokka_id, $curid);
+        if (is_null($luokka)) {
+            Redirect::to('/luokka', array('message' => 'Luokan sivua ei ole olemassa!'));
+        } else {
+            View::make('luokka/edit.html', array('attributes' => $luokka));
+        }
     }
     
     public static function update($luokka_id) {

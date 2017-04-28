@@ -25,9 +25,9 @@ class Luokka extends BaseModel {
         return $luokat;
     }
     
-    public static function find($luokka_id) {
-        $query = DB::connection()->prepare('SELECT * FROM Luokka WHERE luokka_id = :luokka_id LIMIT 1');
-        $query->execute(array('luokka_id' => $luokka_id));
+    public static function find($luokka_id, $user_id) {
+        $query = DB::connection()->prepare('SELECT * FROM Luokka WHERE luokka_id = :luokka_id AND kayttaja_id = :user_id LIMIT 1');
+        $query->execute(array('luokka_id' => $luokka_id, 'user_id' => $user_id));
         $row = $query->fetch();
         
         if($row){

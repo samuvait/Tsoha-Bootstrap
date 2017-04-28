@@ -4,11 +4,7 @@ class AskareController extends BaseController{
     public static function index(){
         self::check_logged_in();
         $user = self::get_user_logged_in();
-        if (is_null($user)) {
-            $user_id = null;
-        } else {
-            $user_id = $user->id;
-        }
+        $user_id = $user->id;
         $askareet = Askare::all($user_id);
         View::make('askare/index.html', array('askareet' => $askareet));
     }
@@ -18,7 +14,7 @@ class AskareController extends BaseController{
         $curid = self::get_user_logged_in()->id;
         $askare = Askare::find($id, $curid);
         if (is_null($askare)) {
-            Redirect::to('/', array('message' => 'Luokan sivua ei ole olemassa!'));
+            Redirect::to('/', array('message' => 'Askareen sivua ei ole olemassa!'));
         } else {
             View::make('askare/taskpage.html', array('askare' => $askare));
         }
@@ -31,7 +27,7 @@ class AskareController extends BaseController{
         $task = Askare::find($id, $curid);
         $luokat = Luokka::all(self::get_user_logged_in()->id);
         if (is_null($task)) {
-            Redirect::to('/', array('message' => 'Luokan sivua ei ole olemassa!'));
+            Redirect::to('/', array('message' => 'Askareen sivua ei ole olemassa!'));
         } else {
             View::make('askare/edit.html', array('attributes' => $task, 'luokat' => $luokat));
         }
