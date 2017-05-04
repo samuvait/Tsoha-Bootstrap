@@ -91,6 +91,18 @@ class Luokka extends BaseModel {
         }
         return $luokat;
     }
+    
+    public static function askareid($askare_id){
+        $query = DB::connection()->prepare('SELECT l.luokka_id FROM Luokka l JOIN Askare_luokka al ON l.luokka_id = al.luokka_id JOIN Askare a ON :askare_id = al.askare_id GROUP BY l.luokka_id');
+        $query->execute(array('askare_id' => $askare_id));
+        $rows = $query->fetchAll();
+        $luokat = array();
+        
+        foreach($rows as $row) {
+            $luokat[] = $row['luokka_id'];
+        }
+        return $luokat;
+    }
     public static function luokkaname($luokka_id){
         $query = DB::connection()->prepare('SELECT luokka_name FROM Luokka WHERE luokka_id = :luokka_id LIMIT 1');
         $query->execute(array('luokka_id' => $luokka_id));
@@ -111,6 +123,10 @@ class Luokka extends BaseModel {
         if($this->validate_string_length($this->luokka_name, 3)){
             $errors[] = 'Luokan pituuden täytyy olla vähintään kolme merkkiä';
         }
+        
+        if($this->validate_string_shorter($this->luokka_name, 50)){
+            $errors[] = 'Luokan pituus saa olla korkeintaan 50 merkkiä';
+        }
         return $errors;
     }
     
@@ -122,6 +138,9 @@ class Luokka extends BaseModel {
         if($this->validate_string_length($this->description, 3)){
             $errors[] = 'Kuvauksen pituuden täytyy olla vähintään kolme merkkiä';
         }
+        if($this->validate_string_shorter($this->description, 400)){
+            $errors[] = 'Kuvauksen pituus saa olla korkeintaan 400 merkkiä';
+        }
         return $errors;
     }
     
@@ -132,6 +151,14 @@ class Luokka extends BaseModel {
     
     public function validate_string_length($string, $length){
         if (strlen($string) < $length) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function validate_string_shorter($string, $length){
+        if (strlen($string) > $length) {
             return true;
         } else {
             return false;

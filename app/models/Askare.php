@@ -96,6 +96,14 @@ class Askare extends BaseModel {
         }
     }
     
+    public function validate_string_shorter($string, $length){
+        if (strlen($string) > $length) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     function validate_date_format($dt){
         $day = DateTime::createFromFormat('Y-m-d', $dt);
         return $day && $day->format('Y-m-d') === $dt;
@@ -118,13 +126,16 @@ class Askare extends BaseModel {
         if($this->validate_string_length($this->name, 3)){
             $errors[] = 'Askareen nimen pituuden täytyy olla vähintään kolme merkkiä';
         }
+        if($this->validate_string_shorter($this->name, 50)){
+            $errors[] = 'Askareen nimen pituus saa olla korkeintaan 50 merkkiä.';
+        }
         return $errors;
     }
     
     public function validate_luokka(){
         $errors = array();
         foreach ($this->luokka as $luokkab) {
-            if($this->luokka == '' || $this->luokka == null){
+            if($luokkab == '' || $luokkab == null){
                 $errors[] = 'Luokka ei voi olla tyhjä!';
             }
         }
@@ -153,6 +164,9 @@ class Askare extends BaseModel {
         if($this->validate_string_length($this->description, 3)){
             $errors[] = 'Kuvauksen pituuden täytyy olla vähintään kolme merkkiä';
         }
+        if($this->validate_string_shorter($this->description, 400)){
+            $errors[] = 'Kuvauksen pituus saa olla korkeintaan 400 merkkiä.';
+        }
         return $errors;
     }
     
@@ -163,6 +177,9 @@ class Askare extends BaseModel {
         }
         if(!is_numeric($this->importance)){
             $errors[] = 'Tärkeysasteen täytyy olla luku!';
+        }
+        if($this->validate_string_shorter($this->name, 400)){
+            $errors[] = 'Kuvauksen pituus saa olla korkeintaan 400 merkkiä.';
         }
         return $errors;
     }

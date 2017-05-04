@@ -79,10 +79,10 @@ class AskareController extends BaseController{
         $today = date('Y-m-d');
         
         if (!array_key_exists('luokka', $params)) {
-            $params['luokka'] = "";
+            $luokat = array();
+        } else {
+            $luokat = $params['luokka'];
         }
-        
-        $luokat = $params['luokka'];
         
         $attributes = array(
             'name' => $params['name'],
