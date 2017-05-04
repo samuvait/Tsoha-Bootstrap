@@ -27,15 +27,21 @@
       
     <div class="form-group">
       <label>Luokka</label>
+      <select class="form-control" name="luokka[]"multiple="">
+        {% for luokka in luokat %}
+          <option value="{{luokka.luokka_id}}">{{luokka.luokka_name}}</option>
+        {% endfor %}
+      </select>
+<!--      <label>Luokka</label>
       <select class="form-control" name="luokka">
         {% for luokka in luokat %}
             {% if attributes.luokka == luokka.luokka_name %}
-                <option value="{{luokka.luokka_name}}" selected="">{{luokka.luokka_name}}</option><!--Luokan id täytyy muuttaa nimeksi indexissa-->
+                <option value="{{luokka.luokka_name}}" selected="">{{luokka.luokka_name}}</option>Luokan id täytyy muuttaa nimeksi indexissa
             {% else %}
                 <option value="{{luokka.luokka_name}}" >{{luokka.luokka_name}}</option>
             {% endif %}
         {% endfor %}
-      </select>
+      </select>-->
     </div>
       
     <div class="form-group">

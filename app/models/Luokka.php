@@ -58,8 +58,14 @@ class Luokka extends BaseModel {
     }
     
     public function destroy() {
+        $this->deleteAskareet();
         $query = DB::connection()->prepare('DELETE FROM Luokka WHERE luokka_id = :luokka_id');
         $query->execute(array('luokka_id' => $this->luokka_id));
+    }
+    
+    public function deleteAskareet() {
+        $query = DB::connection()->prepare('DELETE FROM Askare_luokka WHERE luokka_id = :id');
+        $query->execute(array('id' => $this->luokka_id));
     }
     
     public static function one($luokka_id){
@@ -72,6 +78,29 @@ class Luokka extends BaseModel {
             $tasks[] = Askare::find($row['id'], $row['kayttaja_id']);
         }
         return $tasks;
+    }
+    
+    public static function askare($askare_id){
+        $query = DB::connection()->prepare('SELECT l.luokka_name FROM Luokka l JOIN Askare_luokka al ON l.luokka_id = al.luokka_id JOIN Askare a ON :askare_id = al.askare_id GROUP BY l.luokka_name');
+        $query->execute(array('askare_id' => $askare_id));
+        $rows = $query->fetchAll();
+        $luokat = array();
+        
+        foreach($rows as $row) {
+            $luokat[] = $row['luokka_name'];
+        }
+        return $luokat;
+    }
+    public static function luokkaname($luokka_id){
+        $query = DB::connection()->prepare('SELECT l.luokka_name FROM Luokka WHERE luokka_id = :luokka_id LIMIT 1');
+        $query->execute(array('luokka_id' => $luokka_id));
+        $row = $query->fetch();
+        if($row){
+            $luokka = $row['luokka_name'];
+            return $luokka;
+        } else {
+            return null;
+        }
     }
     
     public function validate_luokka_name(){

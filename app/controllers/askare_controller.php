@@ -35,21 +35,32 @@ class AskareController extends BaseController{
     
     public static function update($id) {
         $params = $_POST;
+        
+        if (!array_key_exists('luokka', $params)) {
+            $luokat = array();
+        } else {
+            $luokat = $params['luokka'];
+        }
+        
         $attributes = array(
             'id' => $id,
             'name' => $params['name'],
-            'luokka' => $params['luokka'],
+            'luokka' => array(),
             'description' => $params['description'],
             'deadline' => $params['deadline'],
             'importance' => $params['importance']
         );
         
+        foreach ($luokat as $luokka) {
+            $attributes['luokka'][] = $luokka;
+        }
+        
         $task = new Askare($attributes);
         $errors = $task->errors();
-        $luokat = Luokka::all(self::get_user_logged_in()->id);
         
         if(count($errors) > 0) {
-            View::make('askare/edit.html', array('errors' => $errors, 'attributes' => $attributes, 'luokat' => $luokat));
+            $sanalliset = Luokka::all(self::get_user_logged_in()->id);
+            View::make('askare/edit.html', array('errors' => $errors, 'attributes' => $attributes, 'luokat' => $sanalliset));
         } else {
             $task->update();
             Redirect::to('/askare/' . $task->id, array('message' => 'Askaretta on muokattu onnistuneesti!'));

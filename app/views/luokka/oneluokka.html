@@ -16,7 +16,6 @@
     <thead>
       <tr>
         <th>Askare</th>
-        <th>Luokka</th>
         <th>Lisäyspäivä</th>
         <th>Deadline</th>
         <th>Tärkeysaste</th>
@@ -29,7 +28,6 @@
         {% for askare in askareet %}
         <tr>
             <td><a href="{{base_path}}/askare/{{askare.id}}">{{askare.name}}</td>
-            <td>{{askare.luokka}}</td>
             <td>{{askare.added}}</td>
             <td>{{askare.deadline}}</td>
             <td>{{askare.importance}}</td>

@@ -19,7 +19,7 @@ class Askare extends BaseModel {
             $tasks[] = new Askare(array(
                 'id' => $row['id'],
                 'name' => $row['name'],
-//                'luokka' => $row['luokka'],
+                'luokka' => Luokka::askare($row['id']),
 //                'done' => $row['done'],
                 'description' => $row['description'],
                 'added' => $row['added'],
@@ -34,12 +34,13 @@ class Askare extends BaseModel {
         $query = DB::connection()->prepare('SELECT * FROM Askare WHERE id = :id AND kayttaja_id = :user_id LIMIT 1');
         $query->execute(array('id' => $id, 'user_id' => $user_id));
         $row = $query->fetch();
+//        $luokat = Luokka::askare( $this->id);
         
         if($row){
             $task = new Askare(array(
                 'id' => $row['id'],
                 'name' => $row['name'],
-//                'luokka' => $row['luokka'],
+                'luokka' => Luokka::askare($row['id']),
 //                'done' => $row['done'],
                 'description' => $row['description'],
                 'added' => $row['added'],
@@ -66,13 +67,24 @@ class Askare extends BaseModel {
     }
     
     public function update() {
-        $query = DB::connection()->prepare('UPDATE Askare SET name = :name, luokka = :luokka, description = :description, deadline = :deadline, importance = :importance WHERE id = :id');
-        $query->execute(array('id' => $this->id, 'name' => $this->name, 'description' => $this->description, 'luokka' => $this->luokka, 'deadline' => $this->deadline, 'importance' => $this->importance));
+        $this->deleteLuokat();
+        $query = DB::connection()->prepare('UPDATE Askare SET name = :name, description = :description, deadline = :deadline, importance = :importance WHERE id = :id');
+        $query->execute(array('id' => $this->id, 'name' => $this->name, 'description' => $this->description, 'deadline' => $this->deadline, 'importance' => $this->importance));
+        foreach ($this->luokka as $luokkab) {
+            $query2 = DB::connection()->prepare('INSERT INTO Askare_luokka (askare_id, luokka_id) VALUES (:askare, :luokka) RETURNING oma_id');
+            $query2->execute(array('askare' => $this->id, 'luokka' => $luokkab));
+        }
         
     }
     
     public function destroy() {
         $query = DB::connection()->prepare('DELETE FROM Askare WHERE id = :id');
+        $query->execute(array('id' => $this->id));
+        $this->deleteLuokat();
+    }
+    
+    public function deleteLuokat() {
+        $query = DB::connection()->prepare('DELETE FROM Askare_luokka WHERE askare_id = :id');
         $query->execute(array('id' => $this->id));
     }
     

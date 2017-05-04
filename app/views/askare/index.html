@@ -33,7 +33,9 @@
         {% for askare in askareet %}
         <tr>
             <td><a href="{{base_path}}/askare/{{askare.id}}">{{askare.name}}</td>
-            <td>{{askare.luokka}}</td>
+            <td>{% for luokka in askare.luokka %}
+                {{luokka}} </br>
+                {% endfor %}</td>
             <td>{{askare.added}}</td>
             <td>{{askare.deadline}}</td>
             <td>{{askare.importance}}</td>

@@ -10,7 +10,9 @@
 {% endif %}
 
 <div class ="col-md-4">
-  <h1>{{askare.luokka}}</h1>
+  <h1>{% for abc in askare.luokka %}
+        {{abc}} </br>
+      {% endfor %}</h1>
   <!-- Painikkeet tähän -->
   <p>
 <!--    <button class="btn btn-danger">Poista</button>-->

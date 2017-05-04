@@ -19,6 +19,7 @@
     <thead>
       <tr>
         <th>Luokka</th>
+        <th>Luokan askareet</th>
         <th>Kuvaus</th>
         <th></th>
       </tr>
@@ -29,6 +30,7 @@
         {% for luokka in luokat %}
         <tr>
             <td><a href="{{base_path}}/luokka/{{luokka.luokka_id}}">{{luokka.luokka_name}}</td>
+            <td><a href="{{base_path}}/luokka/{{luokka.luokka_id}}/show">Askareet</td>
             <td>{{luokka.description}}</td>
             <td><a class="btn btn-default btn-sm" href="{{base_path}}/luokka/{{luokka.luokka_id}}/edit">Muokkaa</a></td>
         </tr>
