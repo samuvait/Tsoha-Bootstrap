@@ -21,9 +21,9 @@
       
     <div class="form-group">
       <label>Luokka</label>
-      <select class="form-control" name="luokka"<!--multiple=""-->>
+      <select class="form-control" name="luokka[]"multiple="">
         {% for luokka in luokat %}
-          <option value="{{luokka.luokka_name}}">{{luokka.luokka_name}}</option>
+          <option value="{{luokka.luokka_id}}">{{luokka.luokka_name}}</option>
         {% endfor %}
       </select>
 <!--      <input name="luokka" class="form-control" value="{{attributes.luokka}}" type="text">-->

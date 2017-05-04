@@ -70,3 +70,7 @@
   $routes->post('/luokka/:id/remove', function($id) {
     LuokkaController::remove($id);
   });
+  
+  $routes->get('/luokka/:id/show', function($id){
+    LuokkaController::one($id);
+  });

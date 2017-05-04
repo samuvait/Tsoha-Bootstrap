@@ -90,5 +90,17 @@ class LuokkaController extends BaseController{
         $luokat = Luokka::all($user_id);
         View::make('luokka/new.html', array('luokat' => $luokat));
     }
+    
+    public static function one($luokka_id){
+        self::check_logged_in();
+        $user = self::get_user_logged_in();
+        if (is_null($user)) {
+            $user_id = null;
+        } else {
+            $user_id = $user->id;
+        }
+        $askareet = Luokka::one($luokka_id);
+        View::make('luokka/oneluokka.html', array('askareet' => $askareet));
+    }
 }
 

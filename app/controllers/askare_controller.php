@@ -71,17 +71,25 @@ class AskareController extends BaseController{
             $params['luokka'] = "";
         }
         
+        $luokat = $params['luokka'];
+        
         $attributes = array(
             'name' => $params['name'],
-            'luokka' => $params['luokka'],
             'description' => $params['description'],
             'deadline' => $params['deadline'],
             'importance' => $params['importance'],
             'kayttaja_id' => self::get_user_logged_in()->id,
-            'added' => $today
+            'added' => $today,
+            'luokka' => array()
         );
+        
+        foreach ($luokat as $luokka) {
+            $attributes['luokka'][] = $luokka;
+        }
+        
         $task = new Askare($attributes);
         $errors = $task->errors();
+        
 //        Kint::dump($params);
         if (count($errors) == 0) {
             $task->save();

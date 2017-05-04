@@ -19,8 +19,8 @@ class Askare extends BaseModel {
             $tasks[] = new Askare(array(
                 'id' => $row['id'],
                 'name' => $row['name'],
-                'luokka' => $row['luokka'],
-                'done' => $row['done'],
+//                'luokka' => $row['luokka'],
+//                'done' => $row['done'],
                 'description' => $row['description'],
                 'added' => $row['added'],
                 'deadline' => $row['deadline'],
@@ -39,8 +39,8 @@ class Askare extends BaseModel {
             $task = new Askare(array(
                 'id' => $row['id'],
                 'name' => $row['name'],
-                'luokka' => $row['luokka'],
-                'done' => $row['done'],
+//                'luokka' => $row['luokka'],
+//                'done' => $row['done'],
                 'description' => $row['description'],
                 'added' => $row['added'],
                 'deadline' => $row['deadline'],
@@ -53,12 +53,16 @@ class Askare extends BaseModel {
     }
     
     public function save(){
-        $query = DB::connection()->prepare('INSERT INTO Askare (name, luokka, description, deadline, importance, added, kayttaja_id) VALUES (:name, :luokka, :description, :deadline, :importance, :added, :user_id) RETURNING id');
-        $query->execute(array('name' => $this->name, 'description' => $this->description, 'luokka' => $this->luokka, 'deadline' => $this->deadline, 'importance' => $this->importance, 'added' => $this->added, 'user_id' => $this->kayttaja_id));
+        $query = DB::connection()->prepare('INSERT INTO Askare (name, description, deadline, importance, added, kayttaja_id) VALUES (:name, :description, :deadline, :importance, :added, :user_id) RETURNING id');
+        $query->execute(array('name' => $this->name, 'description' => $this->description, 'deadline' => $this->deadline, 'importance' => $this->importance, 'added' => $this->added, 'user_id' => $this->kayttaja_id));
         $row = $query->fetch();
 //        Kint::trace();
 //        Kint::dump($row);
         $this->id = $row['id'];
+        foreach ($this->luokka as $luokkab) {
+            $query2 = DB::connection()->prepare('INSERT INTO Askare_luokka (askare_id, luokka_id) VALUES (:askare, :luokka) RETURNING oma_id');
+            $query2->execute(array('askare' => $this->id, 'luokka' => $luokkab));
+        }
     }
     
     public function update() {
@@ -107,8 +111,10 @@ class Askare extends BaseModel {
     
     public function validate_luokka(){
         $errors = array();
-        if($this->luokka == '' || $this->luokka == null){
-            $errors[] = 'Luokka ei voi olla tyhjä!';
+        foreach ($this->luokka as $luokkab) {
+            if($this->luokka == '' || $this->luokka == null){
+                $errors[] = 'Luokka ei voi olla tyhjä!';
+            }
         }
 //        if($this->validate_string_length($this->luokka, 3)){
 //            $errors[] = 'Luokan pituuden täytyy olla vähintään kolme merkkiä';

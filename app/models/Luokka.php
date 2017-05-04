@@ -62,6 +62,18 @@ class Luokka extends BaseModel {
         $query->execute(array('luokka_id' => $this->luokka_id));
     }
     
+    public static function one($luokka_id){
+        $query = DB::connection()->prepare('SELECT a.id, a.kayttaja_id FROM Askare a JOIN Askare_luokka al ON a.id = al.askare_id JOIN Luokka l ON :luokka_id = al.luokka_id GROUP BY a.kayttaja_id, a.id');
+        $query->execute(array('luokka_id' => $luokka_id));
+        $rows = $query->fetchAll();
+        $tasks = array();
+        
+        foreach($rows as $row) {
+            $tasks[] = Askare::find($row['id'], $row['kayttaja_id']);
+        }
+        return $tasks;
+    }
+    
     public function validate_luokka_name(){
         $errors = array();
         if($this->luokka_name == '' || $this->luokka_name == null){
