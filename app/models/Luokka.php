@@ -68,9 +68,9 @@ class Luokka extends BaseModel {
         $query->execute(array('id' => $this->luokka_id));
     }
     
-    public static function one($luokka_id){
-        $query = DB::connection()->prepare('SELECT a.id, a.kayttaja_id FROM Askare a JOIN Askare_luokka al ON a.id = al.askare_id JOIN Luokka l ON :luokka_id = al.luokka_id GROUP BY a.kayttaja_id, a.id');
-        $query->execute(array('luokka_id' => $luokka_id));
+    public static function one($luokka_id, $user_id){
+        $query = DB::connection()->prepare('SELECT a.id, a.kayttaja_id FROM Askare a JOIN Askare_luokka al ON a.id = al.askare_id JOIN Luokka l ON :luokka_id = al.luokka_id AND :user_id = l.kayttaja_id GROUP BY a.kayttaja_id, a.id');
+        $query->execute(array('luokka_id' => $luokka_id, 'user_id' => $user_id));
         $rows = $query->fetchAll();
         $tasks = array();
         
@@ -92,7 +92,7 @@ class Luokka extends BaseModel {
         return $luokat;
     }
     public static function luokkaname($luokka_id){
-        $query = DB::connection()->prepare('SELECT l.luokka_name FROM Luokka WHERE luokka_id = :luokka_id LIMIT 1');
+        $query = DB::connection()->prepare('SELECT luokka_name FROM Luokka WHERE luokka_id = :luokka_id LIMIT 1');
         $query->execute(array('luokka_id' => $luokka_id));
         $row = $query->fetch();
         if($row){

@@ -94,13 +94,12 @@ class LuokkaController extends BaseController{
     public static function one($luokka_id){
         self::check_logged_in();
         $user = self::get_user_logged_in();
-        if (is_null($user)) {
-            $user_id = null;
+        $askareet = Luokka::one($luokka_id, $user->id);
+        if (empty($askareet)) {
+            Redirect::to('/luokka', array('message' => 'Luokalla ei ole yhtään askaretta!'));
         } else {
-            $user_id = $user->id;
+            View::make('luokka/oneluokka.html', array('askareet' => $askareet, 'name' => Luokka::luokkaname($luokka_id)));
         }
-        $askareet = Luokka::one($luokka_id);
-        View::make('luokka/oneluokka.html', array('askareet' => $askareet));
     }
 }
 
