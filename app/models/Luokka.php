@@ -69,7 +69,7 @@ class Luokka extends BaseModel {
     }
     
     public static function one($luokka_id, $user_id){
-        $query = DB::connection()->prepare('SELECT a.id, a.kayttaja_id FROM Askare a JOIN Askare_luokka al ON a.id = al.askare_id JOIN Luokka l ON :luokka_id = al.luokka_id AND :user_id = l.kayttaja_id GROUP BY a.kayttaja_id, a.id');
+        $query = DB::connection()->prepare('SELECT a.id, a.kayttaja_id FROM Askare a JOIN Askare_luokka al ON a.id = al.askare_id JOIN Luokka l ON :luokka_id = al.luokka_id WHERE :user_id = a.kayttaja_id GROUP BY a.kayttaja_id, a.id');
         $query->execute(array('luokka_id' => $luokka_id, 'user_id' => $user_id));
         $rows = $query->fetchAll();
         $tasks = array();
